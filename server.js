@@ -10,11 +10,15 @@ const image = require('./controllers/image');
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0; 
 
+const PORT = process.env.PORT || 3005
+
 const db = knex({
     client: 'pg',
     connection: {
       connectionString : process.env.DATABASE_URL,
-      ssl : true,
+      ssl: {
+        rejectUnauthorized: false
+      }
     }
   });
 
@@ -37,6 +41,6 @@ app.get('/profile/:id', (req, res) => { profile.handleProfile(req, res, db) })
 app.put('/image', (req, res) => { image.handleImage(req, res, db) })
 
 
-app.listen(process.env.PORT || 3005, () => {
-    console.log(`app is running on port ${process.env.PORT}`);
+app.listen(PORT || 3005, () => {
+    console.log(`app is running on port ${PORT}`);
 })
